@@ -5,6 +5,7 @@
     --muted:#687386;
     --line:#e3e7ef;
     --blue:#2563eb;
+    --blue-dark:#1d4ed8;
     --blue-soft:#e9f0ff;
     --high:#dc4b4b;
     --medium:#c78b1d;
@@ -86,12 +87,22 @@ body {
 .button-primary {
     background:var(--blue);
     color:#fff;
-    box-shadow:0 5px 12px #2563eb30
+    box-shadow:0 5px 12px #2563eb30;
+    transition: background-color .2s ease;
+}
+
+.button-primary:hover {
+    background: var(--blue-dark);
 }
 
 .button-danger {
     background:#fff1f1;
-    color:var(--high)
+    color:var(--high);
+    transition: background-color .2s ease;
+}
+
+.button-danger:hover {
+    background: #ffe0e0;
 }
 
 .menu-button {
@@ -128,7 +139,7 @@ body {
 .intro h1 {
     font-size:36px;
     line-height:1.1;
-    margin:0 0 9px;
+    margin:0 0 3px;
     letter-spacing:-.04em
 }
 
@@ -190,15 +201,15 @@ body {
     width:9px;
     height:9px;
     border-radius:50%;
-    background:#9aa5b6
+    background:var(--high);
 }
 
 .column[data-status="in-progress"] .column-dot {
-    background:var(--blue)
+    background:var(--medium);
 }
 
 .column[data-status="done"] .column-dot {
-    background:var(--low)
+    background:var(--low);
 }
 
 .count {
@@ -217,23 +228,35 @@ body {
 }
 
 .task-card {
+    position: relative;
     background:#fff;
     border:1px solid transparent;
     border-radius:9px;
     padding:15px;
     box-shadow:0 2px 5px #1c273d0b;
-    cursor:grab;
+    cursor:default;
     transition:.2s
+}
+
+.drag-handle {
+    position:absolute;
+    top:10px;
+    right:12px;
+    color:var(--muted);
+    cursor:grab;
+    font-size:18px;
+    line-height:1;
+    user-select:none;
+}
+
+.drag-handle:active {
+    cursor:grabbing;
 }
 
 .task-card:hover {
     border-color:#b5c9f7;
     box-shadow:var(--shadow);
     transform:translateY(-1px)
-}
-
-.task-card:active {
-    cursor:grabbing
 }
 
 .task-card h3 {
@@ -351,6 +374,14 @@ body {
     border-radius:7px;
     padding:10px;
     outline:none
+}
+
+#task-priority, #task-status {
+    cursor:pointer;
+}
+
+#task-date {
+    cursor:text;
 }
 
 .field textarea {
