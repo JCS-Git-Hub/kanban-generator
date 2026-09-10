@@ -114,7 +114,7 @@ function render() {
 function card(t) {
 	const commentCount = t.comments?.length || 0;
 
-	return `<article class="task-card" data-id="${escapeHTML(t.id)}" tabindex="0" aria-label="${escapeHTML(t.title)}"><div class="card-actions"><button class="delete-card-button" type="button" aria-label="Eliminar tarea">⌧</button><div class="card-actions-right"><button class="edit-button" type="button" aria-label="Editar tarea">✎</button><button class="comments-button${commentCount === 0 ? ' no-comments' : ''}" type="button" aria-label="Comentarios">${commentCount > 0 ? `🗨 ${commentCount}` : '🗨'}</button><span class="drag-handle" aria-label="Arrastrar tarea">⠿</span></div></div><h3>${escapeHTML(t.title)}</h3><p>${escapeHTML(t.description)}</p><div class="card-meta"><span class="priority priority-${t.priority}">${labels[t.priority]}</span><span>${dateText(t.dueDate)}</span></div></article>`;
+	return `<article class="task-card" data-id="${escapeHTML(t.id)}" tabindex="0" aria-label="${escapeHTML(t.title)}"><div class="card-actions"><button class="delete-card-button" type="button" aria-label="Eliminar tarea">⌧</button><div class="card-actions-right"><button class="edit-button" type="button" aria-label="Editar tarea">✎</button><button class="comments-button${commentCount === 0 ? ' no-comments' : ''}" type="button" aria-label="Comentarios">${commentCount > 0 ? `🗨 ${commentCount}` : '🗨'}</button><span class="drag-handle" aria-label="Arrastrar tarea">⠿</span></div></div><h3>${escapeHTML(t.title)}</h3><p>${escapeHTML(t.description)}</p><div class="card-meta"><span class="priority priority-${t.priority}">${labels[t.priority]} prioridad</span><span>${dateText(t.dueDate)}</span></div></article>`;
 }
 
 function openModal(content) {
