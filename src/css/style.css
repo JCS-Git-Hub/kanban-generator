@@ -239,12 +239,32 @@ body {
 }
 
 .card-actions {
-    position:absolute;
-    top:8px;
-    right:10px;
     display:flex;
     align-items:center;
-    gap:8px;
+    justify-content:space-between;
+}
+
+.card-actions-right {
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.delete-card-button {
+    border:0;
+    background:none;
+    padding:0;
+    color:var(--high);
+    cursor:pointer;
+    font:inherit;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .2s ease, visibility .2s ease;
+}
+
+.task-card:hover .delete-card-button {
+    opacity:1;
+    visibility:visible;
 }
 
 .edit-button,
@@ -313,7 +333,7 @@ body {
 
 .task-card h3 {
     font-size:14px;
-    margin:0 0 7px;
+    margin:8px 0 7px;
     line-height:1.35
 }
 
