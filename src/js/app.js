@@ -62,9 +62,9 @@ async function load() {
 
 function render() {
 	const filtered = state.tasks.filter(
-		t => (t.title + ' ' + t.description)
-		.toLowerCase()
-		.includes(state.query.toLowerCase())
+		t => t.title
+			.toLowerCase()
+			.includes(state.query.toLowerCase())
 	);
 	
 	$('#stats').textContent =
