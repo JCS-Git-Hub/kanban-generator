@@ -66,7 +66,9 @@ function render() {
 	);
 
 	$('#stats').textContent =
-		`${state.tasks.length} ${state.tasks.length === 1 ? 'tarea' : 'tareas'}`;
+		state.tasks.length === 0
+			? 'Ninguna tarea disponible'
+			: `${state.tasks.length} ${state.tasks.length === 1 ? 'tarea' : 'tareas'}`;
 
 	$('#board-columns').innerHTML = columns
 		.map(([status,title]) => {
@@ -78,10 +80,12 @@ function render() {
 
 	document.querySelectorAll('.task-list').forEach(
 		el => new Sortable(el, {
-			group:'kanban',
-			animation:180,
-			ghostClass:'sortable-ghost',
-			chosenClass:'sortable-chosen',
+			group: 'kanban',
+			animation: 180,
+			ghostClass: 'sortable-ghost',
+			chosenClass: 'sortable-chosen',
+			draggable: '.task-card',
+			handle: '.drag-handle',
 			onEnd: async event => {
 				const id = event.item.dataset.id;
 				const status = event.to.dataset.status;
@@ -101,7 +105,7 @@ function render() {
 }
 
 function card(t) {
-	return `<article class="task-card" data-id="${escapeHTML(t.id)}" tabindex="0" role="button" aria-label="Abrir ${escapeHTML(t.title)}"><h3>${escapeHTML(t.title)}</h3><p>${escapeHTML(t.description)}</p><div class="card-meta"><span class="priority priority-${t.priority}">${labels[t.priority]}</span><span>${dateText(t.dueDate)}</span></div></article>`;
+	return `<article class="task-card" data-id="${escapeHTML(t.id)}" tabindex="0" role="button" aria-label="Abrir ${escapeHTML(t.title)}"><span class="drag-handle" aria-label="Arrastrar tarea">⠿</span><h3>${escapeHTML(t.title)}</h3><p>${escapeHTML(t.description)}</p><div class="card-meta"><span class="priority priority-${t.priority}">${labels[t.priority]}</span><span>${dateText(t.dueDate)}</span></div></article>`;
 }
 
 function openModal(content) {
