@@ -105,7 +105,7 @@ function render() {
 }
 
 function card(t) {
-	return `<article class="task-card" data-id="${escapeHTML(t.id)}" tabindex="0" role="button" aria-label="Abrir ${escapeHTML(t.title)}"><span class="drag-handle" aria-label="Arrastrar tarea">⠿</span><h3>${escapeHTML(t.title)}</h3><p>${escapeHTML(t.description)}</p><div class="card-meta"><span class="priority priority-${t.priority}">${labels[t.priority]}</span><span>${dateText(t.dueDate)}</span></div></article>`;
+	return `<article class="task-card" data-id="${escapeHTML(t.id)}" tabindex="0" aria-label="${escapeHTML(t.title)}"><button class="edit-button" type="button" aria-label="Editar tarea">✎</button><span class="drag-handle" aria-label="Arrastrar tarea">⠿</span><h3>${escapeHTML(t.title)}</h3><p>${escapeHTML(t.description)}</p><div class="card-meta"><span class="priority priority-${t.priority}">${labels[t.priority]}</span><span>${dateText(t.dueDate)}</span></div></article>`;
 }
 
 function openModal(content) {
@@ -236,16 +236,22 @@ $('#menu-button').onclick = () => {
 };
 
 document.addEventListener('click', e => {
-	const cardEl = e.target.closest('.task-card');
+	const editButton = e.target.closest('.edit-button');
 
-	if (cardEl) {
-		const task = state.tasks.find(
-			t => String(t.id) === cardEl.dataset.id
-		);
+	if (!editButton)
+		return;
 
-		if (task)
-			detail(task);
-	}
+	const cardEl = editButton.closest('.task-card');
+
+	if (!cardEl)
+		return;
+
+	const task = state.tasks.find(
+		t => String(t.id) === cardEl.dataset.id
+	);
+
+	if (task)
+		detail(task);
 });
 
 document.addEventListener('keydown', e => {

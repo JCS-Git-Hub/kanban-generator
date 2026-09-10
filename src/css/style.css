@@ -249,6 +249,28 @@ body {
     user-select:none;
 }
 
+.edit-button {
+    position:absolute;
+    top:8px;
+    right:36px;
+    border:0;
+    padding:0;
+    background:none;
+    color:var(--muted);
+    cursor:pointer;
+    font:inherit;
+    font-size:17px;
+    line-height:1;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .15s ease;
+}
+
+.task-card:hover .edit-button {
+    opacity:1;
+    pointer-events:auto;
+}
+
 .drag-handle:active {
     cursor:grabbing;
 }
