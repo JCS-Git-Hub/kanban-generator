@@ -238,21 +238,21 @@ body {
     transition:.2s
 }
 
-.drag-handle {
+.card-actions {
     position:absolute;
-    top:10px;
-    right:12px;
-    color:var(--muted);
-    cursor:grab;
-    font-size:18px;
-    line-height:1;
-    user-select:none;
+    top:8px;
+    right:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.edit-button,
+.comments-button {
+    position:static;
 }
 
 .edit-button {
-    position:absolute;
-    top:8px;
-    right:36px;
     border:0;
     padding:0;
     background:none;
@@ -263,12 +263,42 @@ body {
     line-height:1;
     opacity:0;
     pointer-events:none;
-    transition:opacity .15s ease;
+    transition:opacity .2s ease;
+}
+.comments-button {
+    border:0;
+    padding:0;
+    background:none;
+    color:var(--muted);
+    cursor:pointer;
+    font:inherit;
+    font-size:14px;
+    line-height:1;
+}
+
+.comments-button.no-comments {
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+}
+
+.task-card:hover .comments-button.no-comments {
+    opacity:1;
+    pointer-events:auto;
 }
 
 .task-card:hover .edit-button {
     opacity:1;
     pointer-events:auto;
+}
+
+.drag-handle {
+    position:static;
+    color:var(--muted);
+    cursor:grab;
+    font-size:18px;
+    line-height:1;
+    user-select:none;
 }
 
 .drag-handle:active {

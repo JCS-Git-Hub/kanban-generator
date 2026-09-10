@@ -105,7 +105,9 @@ function render() {
 }
 
 function card(t) {
-	return `<article class="task-card" data-id="${escapeHTML(t.id)}" tabindex="0" aria-label="${escapeHTML(t.title)}"><button class="edit-button" type="button" aria-label="Editar tarea">✎</button><span class="drag-handle" aria-label="Arrastrar tarea">⠿</span><h3>${escapeHTML(t.title)}</h3><p>${escapeHTML(t.description)}</p><div class="card-meta"><span class="priority priority-${t.priority}">${labels[t.priority]}</span><span>${dateText(t.dueDate)}</span></div></article>`;
+	const commentCount = t.comments?.length || 0;
+
+	return `<article class="task-card" data-id="${escapeHTML(t.id)}" tabindex="0" aria-label="${escapeHTML(t.title)}"><div class="card-actions"><button class="edit-button" type="button" aria-label="Editar tarea">✎</button><button class="comments-button${commentCount === 0 ? ' no-comments' : ''}" type="button" aria-label="Comentarios">${commentCount > 0 ? `🗨 ${commentCount}` : '🗨'}</button><span class="drag-handle" aria-label="Arrastrar tarea">⠿</span></div><h3>${escapeHTML(t.title)}</h3><p>${escapeHTML(t.description)}</p><div class="card-meta"><span class="priority priority-${t.priority}">${labels[t.priority]}</span><span>${dateText(t.dueDate)}</span></div></article>`;
 }
 
 function openModal(content) {
@@ -152,7 +154,7 @@ function taskForm(task = null) {
 }
 
 function detail(task) {
-	openModal(`<h2 id="modal-title">Detalle de la tarea</h2><form id="task-form" class="form-grid"><div class="field"><label for="task-title">Título</label><input id="task-title" required value="${escapeHTML(task.title)}"></div><div class="field"><label for="task-description">Descripción</label><textarea id="task-description" required>${escapeHTML(task.description)}</textarea></div><div class="form-grid" style="grid-template-columns:1fr 1fr"><div class="field"><label for="task-priority">Prioridad</label><select id="task-priority"><option value="low" ${task.priority === 'low' ? 'selected' : ''}>Baja</option><option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Media</option><option value="high" ${task.priority === 'high'?'selected' : ''}>Alta</option></select></div><div class="field"><label for="task-status">Estado</label><select id="task-status"><option value="todo" ${task.status === 'todo' ? 'selected' : ''}>Por hacer</option><option value="in-progress" ${task.status === 'in-progress' ? 'selected' : ''}>En progreso</option><option value="done" ${task.status === 'done' ? 'selected' : ''}>Finalizado</option></select></div></div><div class="form-actions"><button type="button" class="button button-danger" id="delete-button">Eliminar</button><button class="button button-primary">Guardar cambios</button></div></form><div class="comments"><h3>Comentarios (${task.comments?.length || 0})</h3>${(task.comments || []).map(c => `<div class="comment"><strong>${escapeHTML(c.author)}</strong><time> · ${dateText(c.createdAt.slice(0,10))}</time><p>${escapeHTML(c.text)}</p></div>`).join('') || '<p class="subtitle">Aún no hay comentarios.</p>'}<form class="comment-form" id="comment-form"><input id="comment-author" required placeholder="Tu nombre" aria-label="Tu nombre"><textarea id="comment-text" required placeholder="Añadir un comentario..." aria-label="Nuevo comentario"></textarea><button class="button button-primary">Comentar</button></form></div>`);
+	openModal(`<h2 id="modal-title">Detalle de la tarea</h2><form id="task-form" class="form-grid"><div class="field"><label for="task-title">Título</label><input id="task-title" required value="${escapeHTML(task.title)}"></div><div class="field"><label for="task-description">Descripción</label><textarea id="task-description" required>${escapeHTML(task.description)}</textarea></div><div class="form-grid" style="grid-template-columns:1fr 1fr"><div class="field"><label for="task-priority">Prioridad</label><select id="task-priority"><option value="low" ${task.priority === 'low' ? 'selected' : ''}>Baja</option><option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Media</option><option value="high" ${task.priority === 'high'?'selected' : ''}>Alta</option></select></div><div class="field"><label for="task-status">Estado</label><select id="task-status"><option value="todo" ${task.status === 'todo' ? 'selected' : ''}>Por hacer</option><option value="in-progress" ${task.status === 'in-progress' ? 'selected' : ''}>En progreso</option><option value="done" ${task.status === 'done' ? 'selected' : ''}>Finalizado</option></select></div></div><div class="form-actions"><button type="button" class="button button-danger" id="delete-button">Eliminar</button><button class="button button-primary">Guardar cambios</button></div></form>`);
 
 	$('#task-form').onsubmit = async e => {
 		e.preventDefault();
@@ -181,6 +183,10 @@ function detail(task) {
 			await load()
 		}
 	};
+}
+
+function commentsModal(task) {
+	openModal(`<h2 id="modal-title">Comentarios</h2><div class="comments">${(task.comments || []).map(c => `<div class="comment"><strong>${escapeHTML(c.author)}</strong><time> · ${dateText(c.createdAt.slice(0,10))}</time><p>${escapeHTML(c.text)}</p></div>`).join('') || '<p class="subtitle">Aún no hay comentarios.</p>'}<form class="comment-form" id="comment-form"><input id="comment-author" required placeholder="Tu nombre" aria-label="Tu nombre"><textarea id="comment-text" required placeholder="Añadir un comentario..." aria-label="Nuevo comentario"></textarea><button class="button button-primary">Comentar</button></form></div>`);
 
 	$('#comment-form').onsubmit = async e => {
 		e.preventDefault();
@@ -202,13 +208,12 @@ function detail(task) {
 
 		const updated = { ...task, comments };
 
-		detail(updated);
-
 		state.tasks = state.tasks.map(
 			t => t.id === task.id ? updated : t
 		);
 
 		render();
+		commentsModal(updated);
 	};
 }
 
@@ -237,11 +242,13 @@ $('#menu-button').onclick = () => {
 
 document.addEventListener('click', e => {
 	const editButton = e.target.closest('.edit-button');
+	const commentsButton = e.target.closest('.comments-button');
 
-	if (!editButton)
+	if (!editButton && !commentsButton)
 		return;
 
-	const cardEl = editButton.closest('.task-card');
+	const button = editButton || commentsButton;
+	const cardEl = button.closest('.task-card');
 
 	if (!cardEl)
 		return;
@@ -250,8 +257,14 @@ document.addEventListener('click', e => {
 		t => String(t.id) === cardEl.dataset.id
 	);
 
-	if (task)
+	if (!task)
+		return;
+
+	if (editButton)
 		detail(task);
+
+	if (commentsButton)
+		commentsModal(task);
 });
 
 document.addEventListener('keydown', e => {
