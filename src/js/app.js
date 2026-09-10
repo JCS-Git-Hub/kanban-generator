@@ -77,7 +77,30 @@ function render() {
 		.map(([status,title]) => {
 			const tasks = filtered.filter(t => t.status === status);
 
-			return `<section class="column" data-status="${status}"><div class="column-header"><div class="column-title"><i class="column-dot"></i>${title}</div><span class="count">${tasks.length}</span></div><div class="task-list" data-status="${status}">${tasks.length ? tasks.map(card).join('') : '<div class="empty">No hay tareas aquí</div>'}</div></section>`
+			return `
+				<section class="column" data-status="${status}">
+					<div class="column-header">
+						<div class="column-title">
+							<i class="column-dot"></i>
+							${title}
+						</div>
+
+						<span class="count">${tasks.length}</span>
+					</div>
+
+					<div class="task-list" data-status="${status}">
+						${
+							tasks.length
+								? tasks.map(card).join('')
+								: `
+									<div class="empty">
+										No hay tareas aquí
+									</div>
+								`
+						}
+					</div>
+				</section>
+			`
 		})
 		.join('');
 
@@ -114,7 +137,63 @@ function render() {
 function card(t) {
 	const commentCount = t.comments?.length || 0;
 
-	return `<article class="task-card" data-id="${escapeHTML(t.id)}" tabindex="0" aria-label="${escapeHTML(t.title)}"><div class="card-actions"><button class="delete-card-button" type="button" aria-label="Eliminar tarea">⌧</button><div class="card-actions-right"><button class="edit-button" type="button" aria-label="Editar tarea">✎</button><button class="comments-button${commentCount === 0 ? ' no-comments' : ''}" type="button" aria-label="Comentarios">${commentCount > 0 ? `🗨 ${commentCount}` : '🗨'}</button><span class="drag-handle" aria-label="Arrastrar tarea">⠿</span></div></div><h3>${escapeHTML(t.title)}</h3><p>${escapeHTML(t.description)}</p><div class="card-meta"><span class="priority priority-${t.priority}">${labels[t.priority]} prioridad</span><span>${dateText(t.dueDate)}</span></div></article>`;
+	return `
+		<article
+			class="task-card"
+			data-id="${escapeHTML(t.id)}"
+			tabindex="0"
+			aria-label="${escapeHTML(t.title)}"
+		>
+			<div class="card-actions">
+				<button
+					class="delete-card-button"
+					type="button"
+					aria-label="Eliminar tarea"
+				>
+					⌧
+				</button>
+
+				<div class="card-actions-right">
+					<button
+						class="edit-button"
+						type="button"
+						aria-label="Editar tarea"
+					>
+						✎
+					</button>
+
+					<button
+						class="comments-button${commentCount === 0 ? ' no-comments' : ''}"
+						type="button"
+						aria-label="Comentarios"
+					>
+						${commentCount > 0 ? `🗨 ${commentCount}` : '🗨'}
+					</button>
+
+					<span
+						class="drag-handle"
+						aria-label="Arrastrar tarea"
+					>
+						⠿
+					</span>
+				</div>
+			</div>
+
+			<h3>${escapeHTML(t.title)}</h3>
+
+			<p>${escapeHTML(t.description)}</p>
+
+			<div class="card-meta">
+				<span class="priority priority-${t.priority}">
+					${labels[t.priority]} prioridad
+				</span>
+
+				<span>
+					${dateText(t.dueDate)}
+				</span>
+			</div>
+		</article>
+	`;
 }
 
 function openModal(content) {
@@ -130,7 +209,88 @@ function closeModal() {
 function taskForm(task = null) {
 	const editing = !!task;
 
-	openModal(`<h2 id="modal-title">${editing ? 'Editar tarea' : 'Nueva tarea'}</h2><form id="task-form" class="form-grid"><div class="field"><label for="task-title">Título</label><input id="task-title" required value="${escapeHTML(task?.title)}"></div><div class="field"><label for="task-description">Descripción</label><textarea id="task-description" required>${escapeHTML(task?.description)}</textarea></div><div class="form-grid" style="grid-template-columns:1fr 1fr"><div class="field"><label for="task-priority">Prioridad</label><select id="task-priority"><option value="low" ${task?.priority === 'low' ? 'selected' : ''}>Baja</option><option value="medium" ${task?.priority === 'medium' ? 'selected' : ''}>Media</option><option value="high" ${task?.priority === 'high' ? 'selected' : ''}>Alta</option></select></div><div class="field"><label for="task-date">Fecha límite</label><input id="task-date" type="date" value="${escapeHTML(task?.dueDate)}"></div></div><div class="form-actions"><button type="button" class="button" id="cancel-button">Cancelar</button><button class="button button-primary">${editing ? 'Guardar cambios' : 'Crear tarea'}</button></div></form>`);
+	openModal(`
+		<h2 id="modal-title">
+			${editing ? 'Editar tarea' : 'Nueva tarea'}
+		</h2>
+
+		<form id="task-form" class="form-grid">
+			<div class="field">
+				<label for="task-title">Título</label>
+
+				<input
+					id="task-title"
+					required
+					value="${escapeHTML(task?.title)}"
+				>
+			</div>
+
+			<div class="field">
+				<label for="task-description">Descripción</label>
+
+				<textarea
+					id="task-description"
+					required
+				>${escapeHTML(task?.description)}</textarea>
+			</div>
+
+			<div
+				class="form-grid"
+				style="grid-template-columns:1fr 1fr"
+			>
+				<div class="field">
+					<label for="task-priority">Prioridad</label>
+
+					<select id="task-priority">
+						<option
+							value="low"
+							${task?.priority === 'low' ? 'selected' : ''}
+						>
+							Baja
+						</option>
+
+						<option
+							value="medium"
+							${task?.priority === 'medium' ? 'selected' : ''}
+						>
+							Media
+						</option>
+
+						<option
+							value="high"
+							${task?.priority === 'high' ? 'selected' : ''}
+						>
+							Alta
+						</option>
+					</select>
+				</div>
+
+				<div class="field">
+					<label for="task-date">Fecha límite</label>
+
+					<input
+						id="task-date"
+						type="date"
+						value="${escapeHTML(task?.dueDate)}"
+					>
+				</div>
+			</div>
+
+			<div class="form-actions">
+				<button
+					type="button"
+					class="button"
+					id="cancel-button"
+				>
+					Cancelar
+				</button>
+
+				<button class="button button-primary">
+					${editing ? 'Guardar cambios' : 'Crear tarea'}
+				</button>
+			</div>
+		</form>
+	`);
 
 	$('#cancel-button').onclick = closeModal;
 
@@ -167,7 +327,113 @@ function taskForm(task = null) {
 
 // Task Editing
 function detail(task) {
-	openModal(`<h2 id="modal-title">Detalle de la tarea</h2><form id="task-form" class="form-grid"><div class="field"><label for="task-title">Título</label><input id="task-title" required value="${escapeHTML(task.title)}"></div><div class="field"><label for="task-description">Descripción</label><textarea id="task-description" required>${escapeHTML(task.description)}</textarea></div><div class="form-grid" style="grid-template-columns:1fr 1fr"><div class="field"><label for="task-priority">Prioridad</label><select id="task-priority"><option value="low" ${task.priority === 'low' ? 'selected' : ''}>Baja</option><option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Media</option><option value="high" ${task.priority === 'high'?'selected' : ''}>Alta</option></select></div><div class="field"><label for="task-status">Estado</label><select id="task-status"><option value="todo" ${task.status === 'todo' ? 'selected' : ''}>Por hacer</option><option value="in-progress" ${task.status === 'in-progress' ? 'selected' : ''}>En progreso</option><option value="done" ${task.status === 'done' ? 'selected' : ''}>Finalizado</option></select></div></div><div class="form-actions"><button type="button" class="button button-danger" id="delete-button">Eliminar</button><button class="button button-primary">Guardar cambios</button></div></form>`);
+	openModal(`
+		<h2 id="modal-title">
+			Detalle de la tarea
+		</h2>
+
+		<form id="task-form" class="form-grid">
+			<div class="field">
+				<label for="task-title">
+					Título
+				</label>
+
+				<input
+					id="task-title"
+					required
+					value="${escapeHTML(task.title)}"
+				>
+			</div>
+
+			<div class="field">
+				<label for="task-description">
+					Descripción
+				</label>
+
+				<textarea
+					id="task-description"
+					required
+				>${escapeHTML(task.description)}</textarea>
+			</div>
+
+			<div
+				class="form-grid"
+				style="grid-template-columns:1fr 1fr"
+			>
+				<div class="field">
+					<label for="task-priority">
+						Prioridad
+					</label>
+
+					<select id="task-priority">
+						<option
+							value="low"
+							${task.priority === 'low' ? 'selected' : ''}
+						>
+							Baja
+						</option>
+
+						<option
+							value="medium"
+							${task.priority === 'medium' ? 'selected' : ''}
+						>
+							Media
+						</option>
+
+						<option
+							value="high"
+							${task.priority === 'high' ? 'selected' : ''}
+						>
+							Alta
+						</option>
+					</select>
+				</div>
+
+				<div class="field">
+					<label for="task-status">
+						Estado
+					</label>
+
+					<select id="task-status">
+						<option
+							value="todo"
+							${task.status === 'todo' ? 'selected' : ''}
+						>
+							Por hacer
+						</option>
+
+						<option
+							value="in-progress"
+							${task.status === 'in-progress' ? 'selected' : ''}
+						>
+							En progreso
+						</option>
+
+						<option
+							value="done"
+							${task.status === 'done' ? 'selected' : ''}
+						>
+							Finalizado
+						</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-actions">
+				<button
+					type="button"
+					class="button button-danger"
+					id="delete-button"
+				>
+					Eliminar
+				</button>
+
+				<button class="button button-primary">
+					Guardar cambios
+				</button>
+			</div>
+		</form>
+	`);
 
 	$('#task-form').onsubmit = async e => {
 		e.preventDefault();
@@ -202,7 +468,44 @@ function detail(task) {
 
 // Comment Creation
 function commentsModal(task) {
-	openModal(`<h2 id="modal-title">Comentarios</h2><div class="comments">${(task.comments || []).map(c => `<div class="comment"><strong>${escapeHTML(c.author)}</strong><time> · ${dateText(c.createdAt.slice(0,10))}</time><p>${escapeHTML(c.text)}</p></div>`).join('') || '<p class="subtitle">Aún no hay comentarios.</p>'}<form class="comment-form" id="comment-form"><input id="comment-author" required placeholder="Tu nombre" aria-label="Tu nombre"><textarea id="comment-text" required placeholder="Añadir un comentario..." aria-label="Nuevo comentario"></textarea><button class="button button-primary">Comentar</button></form></div>`);
+	openModal(`
+		<h2 id="modal-title">Comentarios</h2>
+
+		<div class="comments">
+			${
+				(task.comments || [])
+					.map(c => `
+						<div class="comment">
+							<strong>${escapeHTML(c.author)}</strong>
+							<time> · ${dateText(c.createdAt.slice(0, 10))}</time>
+							<p>${escapeHTML(c.text)}</p>
+						</div>
+					`)
+					.join('')
+				|| '<p class="subtitle">Aún no hay comentarios.</p>'
+			}
+
+			<form class="comment-form" id="comment-form">
+				<input
+					id="comment-author"
+					required
+					placeholder="Tu nombre"
+					aria-label="Tu nombre"
+				>
+
+				<textarea
+					id="comment-text"
+					required
+					placeholder="Añadir un comentario..."
+					aria-label="Nuevo comentario"
+				></textarea>
+
+				<button class="button button-primary">
+					Comentar
+				</button>
+			</form>
+		</div>
+	`);
 
 	$('#comment-form').onsubmit = async e => {
 		e.preventDefault();
