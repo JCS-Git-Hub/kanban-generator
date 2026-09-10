@@ -39,6 +39,7 @@ const dateText = date =>
 		)
 	:'Sin fecha';
 
+// Task's list from `json-server` via `fetch`
 async function request(path,options = {}) {
 	const response = await fetch(API + path, {
 		headers: { 'Content-Type': 'application/json' },
@@ -53,6 +54,7 @@ async function request(path,options = {}) {
 		: response.json();
 }
 
+// GET Petition
 async function load() {
 	state.tasks = await request('/tasks');
 	render();
@@ -64,12 +66,13 @@ function render() {
 		.toLowerCase()
 		.includes(state.query.toLowerCase())
 	);
-
+	
 	$('#stats').textContent =
-		state.tasks.length === 0
-			? 'Ninguna tarea disponible'
-			: `${state.tasks.length} ${state.tasks.length === 1 ? 'tarea' : 'tareas'}`;
-
+	state.tasks.length === 0
+	? 'Ninguna tarea disponible'
+	: `${state.tasks.length} ${state.tasks.length === 1 ? 'tarea' : 'tareas'}`;
+	
+	// Dynamic rendering of each card inside its corresponding table evaluating `status`
 	$('#board-columns').innerHTML = columns
 		.map(([status,title]) => {
 			const tasks = filtered.filter(t => t.status === status);
@@ -78,6 +81,7 @@ function render() {
 		})
 		.join('');
 
+	// SortableJS instance for each `.task-list`
 	document.querySelectorAll('.task-list').forEach(
 		el => new Sortable(el, {
 			group: 'kanban',
@@ -86,9 +90,11 @@ function render() {
 			chosenClass: 'sortable-chosen',
 			draggable: '.task-card',
 			handle: '.drag-handle',
+			// On mouse release PATCH Petition
 			onEnd: async event => {
 				const id = event.item.dataset.id;
 				const status = event.to.dataset.status;
+				// Immediate `status` update
 				const task = state.tasks.find(t => String(t.id) === id);
 
 				if (task && task.status !== status) {
@@ -104,6 +110,7 @@ function render() {
 	);
 }
 
+// HTML generated for each individual task
 function card(t) {
 	const commentCount = t.comments?.length || 0;
 
@@ -119,15 +126,19 @@ function closeModal() {
 	$('#modal-backdrop').hidden = true;
 }
 
+// Interactive form for creating a new card: `taskForm()`
 function taskForm(task = null) {
 	const editing = !!task;
 
 	openModal(`<h2 id="modal-title">${editing ? 'Editar tarea' : 'Nueva tarea'}</h2><form id="task-form" class="form-grid"><div class="field"><label for="task-title">Título</label><input id="task-title" required value="${escapeHTML(task?.title)}"></div><div class="field"><label for="task-description">Descripción</label><textarea id="task-description" required>${escapeHTML(task?.description)}</textarea></div><div class="form-grid" style="grid-template-columns:1fr 1fr"><div class="field"><label for="task-priority">Prioridad</label><select id="task-priority"><option value="low" ${task?.priority === 'low' ? 'selected' : ''}>Baja</option><option value="medium" ${task?.priority === 'medium' ? 'selected' : ''}>Media</option><option value="high" ${task?.priority === 'high' ? 'selected' : ''}>Alta</option></select></div><div class="field"><label for="task-date">Fecha límite</label><input id="task-date" type="date" value="${escapeHTML(task?.dueDate)}"></div></div><div class="form-actions"><button type="button" class="button" id="cancel-button">Cancelar</button><button class="button button-primary">${editing ? 'Guardar cambios' : 'Crear tarea'}</button></div></form>`);
 
 	$('#cancel-button').onclick = closeModal;
+
+	// Card creation via POST
 	$('#task-form').onsubmit = async e => {
 		e.preventDefault();
 
+		// `status:task?.status || 'todo'` defaults new cards into the "Por hacer" column
 		const data = {
 			title: $('#task-title').value.trim(),
 			description:$('#task-description').value.trim(),
@@ -137,6 +148,7 @@ function taskForm(task = null) {
 			comments:task?.comments || []
 		};
 
+		// Task Editing via PUT Petition
 		if (editing) {
 			await request('/tasks/' + task.id, {
 				method:'PUT',
@@ -153,12 +165,14 @@ function taskForm(task = null) {
 	};
 }
 
+// Task Editing
 function detail(task) {
 	openModal(`<h2 id="modal-title">Detalle de la tarea</h2><form id="task-form" class="form-grid"><div class="field"><label for="task-title">Título</label><input id="task-title" required value="${escapeHTML(task.title)}"></div><div class="field"><label for="task-description">Descripción</label><textarea id="task-description" required>${escapeHTML(task.description)}</textarea></div><div class="form-grid" style="grid-template-columns:1fr 1fr"><div class="field"><label for="task-priority">Prioridad</label><select id="task-priority"><option value="low" ${task.priority === 'low' ? 'selected' : ''}>Baja</option><option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Media</option><option value="high" ${task.priority === 'high'?'selected' : ''}>Alta</option></select></div><div class="field"><label for="task-status">Estado</label><select id="task-status"><option value="todo" ${task.status === 'todo' ? 'selected' : ''}>Por hacer</option><option value="in-progress" ${task.status === 'in-progress' ? 'selected' : ''}>En progreso</option><option value="done" ${task.status === 'done' ? 'selected' : ''}>Finalizado</option></select></div></div><div class="form-actions"><button type="button" class="button button-danger" id="delete-button">Eliminar</button><button class="button button-primary">Guardar cambios</button></div></form>`);
 
 	$('#task-form').onsubmit = async e => {
 		e.preventDefault();
 
+		// PATCH Petition for Task Editing
 		await request('/tasks/' + task.id, {
 			method:'PATCH',
 			body:JSON.stringify({
@@ -173,6 +187,7 @@ function detail(task) {
 		await load()
 	};
 
+	// Card Deletion via DELETE Petition
 	$('#delete-button').onclick = async () => {
 		if (confirm('¿Eliminar esta tarea?')) {
 			await request('/tasks/' + task.id, {
@@ -185,6 +200,7 @@ function detail(task) {
 	};
 }
 
+// Comment Creation
 function commentsModal(task) {
 	openModal(`<h2 id="modal-title">Comentarios</h2><div class="comments">${(task.comments || []).map(c => `<div class="comment"><strong>${escapeHTML(c.author)}</strong><time> · ${dateText(c.createdAt.slice(0,10))}</time><p>${escapeHTML(c.text)}</p></div>`).join('') || '<p class="subtitle">Aún no hay comentarios.</p>'}<form class="comment-form" id="comment-form"><input id="comment-author" required placeholder="Tu nombre" aria-label="Tu nombre"><textarea id="comment-text" required placeholder="Añadir un comentario..." aria-label="Nuevo comentario"></textarea><button class="button button-primary">Comentar</button></form></div>`);
 
@@ -217,6 +233,7 @@ function commentsModal(task) {
 	};
 }
 
+// `taskForm()` Call Action
 $('#new-task-button').onclick = () => taskForm();
 
 $('#search-input').oninput = e => {
@@ -231,6 +248,7 @@ $('#modal-backdrop').onclick = e => {
 		closeModal()
 };
 
+// Menu Interaction for Responsive Design
 $('#menu-button').onclick = () => {
 	const menu = $('#mobile-menu');
 	menu.hidden = !menu.hidden;
@@ -240,6 +258,7 @@ $('#menu-button').onclick = () => {
 	);
 };
 
+// Open Modal Details Window
 document.addEventListener('click', e => {
 	const editButton = e.target.closest('.edit-button');
 	const commentsButton = e.target.closest('.comments-button');

@@ -11,6 +11,7 @@
   
   <link rel="stylesheet" href="./src/css/style.css">
 
+  <!-- SortableJS Loading -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.7/Sortable.min.js" defer></script>
   <script src="./src/js/app.js" defer></script>
 </head>
@@ -22,6 +23,7 @@
     <div class="header-actions">
       <span class="stats" id="stats">0 tareas</span>
       <button class="button button-primary" id="new-task-button">+ Nueva tarea</button>
+      <!-- Hamburger Button for responsive design -->
       <button class="menu-button" id="menu-button" aria-label="Abrir menú" aria-expanded="false">☰</button>
     </div>
   </header>
@@ -32,6 +34,7 @@
         <h1>Tablero Kanban</h1>
       </div>
 
+      <!-- Search Bar -->
       <label class="search">
         <span aria-hidden="true">⌕</span>
         <input id="search-input" type="search" placeholder="Buscar tareas..." aria-label="Buscar tareas">
