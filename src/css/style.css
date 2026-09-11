@@ -3,6 +3,7 @@
     --surface:#fff;
     --ink:#172033;
     --muted:#687386;
+    --muted-soft:#edf1f6;
     --line:#e3e7ef;
     --blue:#2563eb;
     --blue-dark:#1d4ed8;
@@ -93,6 +94,16 @@ body {
 
 .button-primary:hover {
     background: var(--blue-dark);
+}
+
+.button-user {
+    background:var(--muted-soft);
+    color:var(--ink);
+    transition:background-color .2s ease;
+}
+
+.button-user:hover {
+    background:#e8ebf0;
 }
 
 .button-danger {
@@ -353,6 +364,18 @@ body {
     justify-content:space-between;
     color:var(--muted);
     font-size:11px
+}
+
+.task-assignee {
+    display:flex;
+    align-items:center;
+}
+
+.task-assignee img {
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    object-fit:cover
 }
 
 .priority {

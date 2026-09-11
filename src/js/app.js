@@ -1,7 +1,9 @@
 const API = '';
 
 const state = {
-	tasks:[],query:''
+	tasks:[],
+	users:[],
+	query:''
 };
 
 const columns = [
@@ -57,6 +59,8 @@ async function request(path,options = {}) {
 // GET Petition
 async function load() {
 	state.tasks = await request('/tasks');
+	state.users = await request('/users');
+
 	render();
 }
 
@@ -137,6 +141,10 @@ function render() {
 function card(t) {
 	const commentCount = t.comments?.length || 0;
 
+	const user = state.users.find(
+		u => String(u.id) === String(t.userId)
+    );
+
 	return `
 		<article
 			class="task-card"
@@ -191,6 +199,19 @@ function card(t) {
 				<span>
 					${dateText(t.dueDate)}
 				</span>
+
+				<div class="task-assignee">
+                ${
+                    user
+                        ? `
+                            <img
+                                src="${escapeHTML(user.avatar)}"
+                                alt="${escapeHTML(user.name)}"
+                            >
+                        `
+                        : ''
+                }
+            	</div>
 			</div>
 		</article>
 	`;
@@ -208,6 +229,17 @@ function closeModal() {
 // Interactive form for creating a new card: `taskForm()`
 function taskForm(task = null) {
 	const editing = !!task;
+
+	const userOptions = state.users
+	.map(user => `
+		<option
+			value="${escapeHTML(user.id)}"
+			${String(task?.userId) === String(user.id) ? 'selected' : ''}
+		>
+			${escapeHTML(user.name)}
+		</option>
+	`)
+	.join('');
 
 	openModal(`
 		<h2 id="modal-title">
@@ -276,6 +308,15 @@ function taskForm(task = null) {
 				</div>
 			</div>
 
+			<div class="field">
+				<label for="task-user">Responsable</label>
+
+				<select id="task-user">
+					<option value="">Sin asignar</option>
+					${userOptions}
+				</select>
+			</div>
+
 			<div class="form-actions">
 				<button
 					type="button"
@@ -305,7 +346,8 @@ function taskForm(task = null) {
 			priority:$('#task-priority').value,
 			dueDate:$('#task-date').value,
 			status:task?.status || 'todo',
-			comments:task?.comments || []
+			comments:task?.comments || [],
+			userId: $('#task-user').value
 		};
 
 		// Task Editing via PUT Petition
@@ -323,6 +365,69 @@ function taskForm(task = null) {
 		closeModal();
 		await load();
 	};
+}
+
+// User Registration
+function userForm() {
+    openModal(`
+        <h2 id="modal-title">Nuevo usuario</h2>
+
+        <form id="user-form" class="form-grid">
+
+            <div class="field">
+                <label for="user-name">Nombre</label>
+                <input
+                    id="user-name"
+                    required
+                    placeholder="Nombre del usuario"
+                >
+            </div>
+
+            <div class="field">
+                <label for="user-avatar">Avatar</label>
+                <input
+                    id="user-avatar"
+                    type="url"
+                    required
+                    placeholder="URL de la imagen"
+                >
+            </div>
+
+            <div class="form-actions">
+                <button
+                    type="button"
+                    class="button"
+                    id="cancel-user-button"
+                >
+                    Cancelar
+                </button>
+
+                <button class="button button-primary">
+                    Registrar usuario
+                </button>
+            </div>
+
+        </form>
+    `);
+
+    $('#cancel-user-button').onclick = closeModal;
+
+    $('#user-form').onsubmit = async e => {
+        e.preventDefault();
+
+        const data = {
+            name: $('#user-name').value.trim(),
+            avatar: $('#user-avatar').value.trim()
+        };
+
+        await request('/users', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+
+        closeModal();
+        await load();
+    };
 }
 
 // Task Editing
@@ -538,6 +643,8 @@ function commentsModal(task) {
 
 // `taskForm()` Call Action
 $('#new-task-button').onclick = () => taskForm();
+
+$('#new-user-button').onclick = () => userForm();
 
 $('#search-input').oninput = e => {
 	state.query = e.target.value;

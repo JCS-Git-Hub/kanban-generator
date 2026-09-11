@@ -1,4 +1,38 @@
 {
-  "tasks": [],
+  "tasks": [
+    {
+      "title": "Título de ejemplo",
+      "description": "Descripción de ejemplo",
+      "priority": "high",
+      "dueDate": "",
+      "status": "todo",
+      "comments": [
+        {
+          "id": "3fb0088c-5ff5-4943-b621-5af50ec54783",
+          "author": "Usuario de ejemplo",
+          "text": "Comentario de ejemplo",
+          "createdAt": "2026-09-11T08:28:28.607Z"
+        }
+      ],
+      "id": "MCmUUMRkh8o"
+    },
+    {
+      "title": "Título de ejemplo 2",
+      "description": "Descripción de ejemplo 2",
+      "priority": "medium",
+      "dueDate": "",
+      "status": "todo",
+      "comments": [],
+      "userId": "f_3mZ657MoQ",
+      "id": "gOd6wNsLEP8"
+    }
+  ],
+  "users": [
+    {
+      "name": "Usuario de ejemplo 1",
+      "avatar": "https://www.beverlyhillsvets.com/blog/wp-content/uploads/2021/04/BeverlyHills-2-2000x1328.jpg",
+      "id": "f_3mZ657MoQ"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
