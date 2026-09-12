@@ -302,6 +302,18 @@ body {
     transition:opacity .2s ease;
 }
 
+.edit-button:hover {
+	color:var(--blue);
+}
+
+.comments-button:hover {
+	color:var(--blue);
+}
+
+.delete-card-button:hover {
+	color:#b91c1c;
+}
+
 .task-card:hover .comments-button.no-comments {
     opacity:1;
     pointer-events:auto;
