@@ -293,10 +293,37 @@ function taskForm(task = null) {
 	`);
 
 	$('#cancel-button').onclick = closeModal;
+	
+	// Prevent selecting a date before today when creating a task
+	if (!editing) {
+		const today = new Date();
+		const year = today.getFullYear();
+		const month = String(today.getMonth() + 1).padStart(2, '0');
+		const day = String(today.getDate()).padStart(2, '0');
+
+		$('#task-date').min = `${year}-${month}-${day}`;
+	}
 
 	// Card creation via POST
 	$('#task-form').onsubmit = async e => {
 		e.preventDefault();
+
+		const dueDate = $('#task-date').value;
+
+		// Final validation before creating the task
+		if (!editing && dueDate) {
+			const today = new Date();
+			const year = today.getFullYear();
+			const month = String(today.getMonth() + 1).padStart(2, '0');
+			const day = String(today.getDate()).padStart(2, '0');
+
+			const todayString = `${year}-${month}-${day}`;
+
+			if (dueDate < todayString) {
+				alert('La fecha límite no puede ser anterior a hoy.');
+				return;
+			}
+		}
 
 		// `status:task?.status || 'todo'` defaults new cards into the "Por hacer" column
 		const data = {
