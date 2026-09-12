@@ -657,4 +657,13 @@ body {
     .intro h1 {
         font-size:31px
     }
+
+    .task-card .delete-card-button,
+    .task-card .edit-button,
+    .task-card .comments-button,
+    .comment-actions {
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+	}
 }
