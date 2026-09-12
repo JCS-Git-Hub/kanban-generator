@@ -149,6 +149,7 @@ function card(t) {
 					class="delete-card-button"
 					type="button"
 					aria-label="Eliminar tarea"
+					title="Eliminar tarea"
 				>
 					⌧
 				</button>
@@ -158,6 +159,7 @@ function card(t) {
 						class="edit-button"
 						type="button"
 						aria-label="Editar tarea"
+						title="Editar tarea"
 					>
 						✎
 					</button>
@@ -166,6 +168,7 @@ function card(t) {
 						class="comments-button${commentCount === 0 ? ' no-comments' : ''}"
 						type="button"
 						aria-label="Comentarios"
+						title="Comentarios"
 					>
 						${commentCount > 0 ? `🗨 ${commentCount}` : '🗨'}
 					</button>
@@ -173,6 +176,7 @@ function card(t) {
 					<span
 						class="drag-handle"
 						aria-label="Arrastrar tarea"
+						title="Arrastrar tarea"
 					>
 						⠿
 					</span>
@@ -530,6 +534,7 @@ function commentsModal(task) {
 										class="comment-edit-button"
 										data-comment-id="${escapeHTML(c.id)}"
 										aria-label="Editar comentario"
+										title="Editar comentario"
 									>
 										✎
 									</button>
@@ -539,6 +544,7 @@ function commentsModal(task) {
 										class="comment-delete-button"
 										data-comment-id="${escapeHTML(c.id)}"
 										aria-label="Eliminar comentario"
+										title="Eliminar comentario"
 									>
 										⌧
 									</button>
