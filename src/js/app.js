@@ -502,9 +502,49 @@ function commentsModal(task) {
 			${
 				(task.comments || [])
 					.map(c => `
-						<div class="comment">
-							<strong>${escapeHTML(c.author)}</strong>
-							<time> · ${dateText(c.createdAt.slice(0, 10))}</time>
+						<div class="comment" data-comment-id="${escapeHTML(c.id)}">
+							<div class="comment-header">
+								<div>
+									<strong>${escapeHTML(c.author)}</strong>
+
+									<time>
+										· ${dateText(c.createdAt.slice(0, 10))}
+
+										${
+											c.updatedAt
+												? ` · (Editado: ${new Date(c.updatedAt).toLocaleDateString(
+													'es-ES',
+													{
+														day: '2-digit',
+														month: 'short'
+													}
+												)})`
+												: ''
+										}
+									</time>
+								</div>
+
+								<div class="comment-actions">
+									<button
+										type="button"
+										class="comment-edit-button"
+										data-comment-id="${escapeHTML(c.id)}"
+										aria-label="Editar comentario"
+									>
+										✎
+									</button>
+
+									<button
+										type="button"
+										class="comment-delete-button"
+										data-comment-id="${escapeHTML(c.id)}"
+										aria-label="Eliminar comentario"
+									>
+										⌧
+									</button>
+								</div>
+							</div>
+
 							<p>${escapeHTML(c.text)}</p>
 						</div>
 					`)
@@ -534,6 +574,7 @@ function commentsModal(task) {
 		</div>
 	`);
 
+	// Add new comment
 	$('#comment-form').onsubmit = async e => {
 		e.preventDefault();
 
@@ -561,6 +602,86 @@ function commentsModal(task) {
 		render();
 		commentsModal(updated);
 	};
+
+	// Edit comment
+	document.querySelectorAll('.comment-edit-button').forEach(button => {
+		button.onclick = async () => {
+			const commentId = button.dataset.commentId;
+
+			const comment = (task.comments || []).find(
+				c => String(c.id) === commentId
+			);
+
+			if (!comment)
+				return;
+
+			const newText = prompt(
+				'Editar comentario:',
+				comment.text
+			);
+
+			if (newText === null)
+				return;
+
+			const text = newText.trim();
+
+			if (!text) {
+				alert('El comentario no puede estar vacío.');
+				return;
+			}
+
+			const comments = (task.comments || []).map(c =>
+				String(c.id) === commentId
+					? {
+						...c,
+						text,
+						updatedAt: new Date().toISOString()
+					}
+					: c
+			);
+
+			await request('/tasks/' + task.id, {
+				method:'PATCH',
+				body:JSON.stringify({ comments })
+			});
+
+			const updated = { ...task, comments };
+
+			state.tasks = state.tasks.map(
+				t => t.id === task.id ? updated : t
+			);
+
+			commentsModal(updated);
+		};
+	});
+
+	// Delete comment
+	document.querySelectorAll('.comment-delete-button').forEach(button => {
+		button.onclick = async () => {
+			const commentId = button.dataset.commentId;
+
+			if (!confirm('¿Eliminar este comentario?'))
+				return;
+
+			const comments = (task.comments || []).filter(
+				c => String(c.id) !== commentId
+			);
+
+			await request('/tasks/' + task.id, {
+				method:'PATCH',
+				body:JSON.stringify({ comments })
+			});
+
+			const updated = { ...task, comments };
+
+			state.tasks = state.tasks.map(
+				t => t.id === task.id ? updated : t
+			);
+
+			render();
+			commentsModal(updated);
+		};
+	});
 }
 
 // `taskForm()` Call Action

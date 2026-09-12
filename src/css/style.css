@@ -491,6 +491,45 @@ body {
     margin-bottom:8px
 }
 
+.comment-header {
+	display:flex;
+	align-items:flex-start;
+	justify-content:space-between;
+	gap:10px;
+}
+
+.comment-actions {
+	display:flex;
+	align-items:center;
+	gap:8px;
+}
+
+.comment-edit-button,
+.comment-delete-button {
+	border:0;
+	background:none;
+	padding:0;
+	cursor:pointer;
+	font:inherit;
+	line-height:1;
+}
+
+.comment-edit-button {
+	color:var(--muted);
+}
+
+.comment-delete-button {
+	color:var(--high);
+}
+
+.comment-edit-button:hover {
+	color:var(--blue);
+}
+
+.comment-delete-button:hover {
+	color:#b91c1c;
+}
+
 .comment strong {
     font-size:12px
 }
