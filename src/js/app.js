@@ -39,7 +39,6 @@ const dateText = date =>
 		)
 	:'Sin fecha';
 
-// Task's list from `json-server` via `fetch`
 async function request(path,options = {}) {
 	const response = await fetch(API + path, {
 		headers: { 'Content-Type': 'application/json' },
@@ -54,7 +53,6 @@ async function request(path,options = {}) {
 		: response.json();
 }
 
-// GET Petition
 async function load() {
 	state.tasks = await request('/tasks');
 	render();
@@ -72,7 +70,6 @@ function render() {
 	? 'Ninguna tarea disponible'
 	: `${state.tasks.length} ${state.tasks.length === 1 ? 'tarea' : 'tareas'}`;
 	
-	// Dynamic rendering of each card inside its corresponding table evaluating `status`
 	$('#board-columns').innerHTML = columns
 		.map(([status,title]) => {
 			const tasks = filtered.filter(t => t.status === status);
@@ -104,7 +101,6 @@ function render() {
 		})
 		.join('');
 
-	// SortableJS instance for each `.task-list`
 	document.querySelectorAll('.task-list').forEach(
 		el => new Sortable(el, {
 			group: 'kanban',
@@ -113,11 +109,9 @@ function render() {
 			chosenClass: 'sortable-chosen',
 			draggable: '.task-card',
 			handle: '.drag-handle',
-			// On mouse release PATCH Petition
 			onEnd: async event => {
 				const id = event.item.dataset.id;
 				const status = event.to.dataset.status;
-				// Immediate `status` update
 				const task = state.tasks.find(t => String(t.id) === id);
 
 				if (task && task.status !== status) {
@@ -133,7 +127,6 @@ function render() {
 	);
 }
 
-// HTML generated for each individual task
 function card(t) {
 	const commentCount = t.comments?.length || 0;
 
@@ -209,7 +202,6 @@ function closeModal() {
 	$('#modal-backdrop').hidden = true;
 }
 
-// Interactive form for creating a new card: `taskForm()`
 function taskForm(task = null) {
 	const editing = !!task;
 
@@ -298,7 +290,6 @@ function taskForm(task = null) {
 
 	$('#cancel-button').onclick = closeModal;
 	
-	// Prevent selecting a date before today when creating a task
 	if (!editing) {
 		const today = new Date();
 		const year = today.getFullYear();
@@ -308,13 +299,11 @@ function taskForm(task = null) {
 		$('#task-date').min = `${year}-${month}-${day}`;
 	}
 
-	// Card creation via POST
 	$('#task-form').onsubmit = async e => {
 		e.preventDefault();
 
 		const dueDate = $('#task-date').value;
 
-		// Final validation before creating the task
 		if (!editing && dueDate) {
 			const today = new Date();
 			const year = today.getFullYear();
@@ -329,7 +318,6 @@ function taskForm(task = null) {
 			}
 		}
 
-		// `status:task?.status || 'todo'` defaults new cards into the "Por hacer" column
 		const data = {
 			title: $('#task-title').value.trim(),
 			description:$('#task-description').value.trim(),
@@ -339,7 +327,6 @@ function taskForm(task = null) {
 			comments:task?.comments || []
 		};
 
-		// Task Editing via PUT Petition
 		if (editing) {
 			await request('/tasks/' + task.id, {
 				method:'PUT',
@@ -356,7 +343,6 @@ function taskForm(task = null) {
 	};
 }
 
-// Task Editing
 function detail(task) {
 	openModal(`
 		<h2 id="modal-title">
@@ -469,7 +455,6 @@ function detail(task) {
 	$('#task-form').onsubmit = async e => {
 		e.preventDefault();
 
-		// PATCH Petition for Task Editing
 		await request('/tasks/' + task.id, {
 			method:'PATCH',
 			body:JSON.stringify({
@@ -484,7 +469,6 @@ function detail(task) {
 		await load()
 	};
 
-	// Card Deletion via DELETE Petition
 	$('#delete-button').onclick = async () => {
 		if (confirm('¿Eliminar esta tarea?')) {
 			await request('/tasks/' + task.id, {
@@ -497,7 +481,6 @@ function detail(task) {
 	};
 }
 
-// Comment Creation
 function commentsModal(task) {
 	openModal(`
 		<h2 id="modal-title">Comentarios</h2>
@@ -580,7 +563,6 @@ function commentsModal(task) {
 		</div>
 	`);
 
-	// Add new comment
 	$('#comment-form').onsubmit = async e => {
 		e.preventDefault();
 
@@ -609,7 +591,6 @@ function commentsModal(task) {
 		commentsModal(updated);
 	};
 
-	// Edit comment
 	document.querySelectorAll('.comment-edit-button').forEach(button => {
 		button.onclick = async () => {
 			const commentId = button.dataset.commentId;
@@ -661,7 +642,6 @@ function commentsModal(task) {
 		};
 	});
 
-	// Delete comment
 	document.querySelectorAll('.comment-delete-button').forEach(button => {
 		button.onclick = async () => {
 			const commentId = button.dataset.commentId;
@@ -690,7 +670,6 @@ function commentsModal(task) {
 	});
 }
 
-// `taskForm()` Call Action
 $('#new-task-button').onclick = () => taskForm();
 
 $('#search-input').oninput = e => {
@@ -705,7 +684,6 @@ $('#modal-backdrop').onclick = e => {
 		closeModal()
 };
 
-// Menu Interaction for Responsive Design
 $('#menu-button').onclick = () => {
 	const menu = $('#mobile-menu');
 	menu.hidden = !menu.hidden;
@@ -715,7 +693,6 @@ $('#menu-button').onclick = () => {
 	);
 };
 
-// Open Modal Details Window
 document.addEventListener('click', async e => {
 	const deleteButton = e.target.closest('.delete-card-button');
 	const editButton = e.target.closest('.edit-button');
