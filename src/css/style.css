@@ -53,15 +53,9 @@ body {
     font-size:19px
 }
 
-.brand-mark {
-    display:grid;
-    place-items:center;
-    background:var(--blue);
-    color:#fff;
-    width:31px;
-    height:31px;
-    border-radius:8px;
-    font-weight:800
+.brand-logo {
+    width: 28px;
+    height: 31px;
 }
 
 .header-actions {

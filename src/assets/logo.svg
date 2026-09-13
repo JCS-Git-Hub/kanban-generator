@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 158 172">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-linejoin: round;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-5 {
+        stroke-linecap: round;
+      }
+
+      .cls-1, .cls-4, .cls-6 {
+        stroke: #000;
+        stroke-width: 12px;
+      }
+
+      .cls-2 {
+        stroke: #c78b1d;
+      }
+
+      .cls-2, .cls-3, .cls-5 {
+        stroke-width: 9px;
+      }
+
+      .cls-3 {
+        stroke: #168a6b;
+      }
+
+      .cls-5 {
+        stroke: #dc4b4b;
+      }
+
+      .cls-6 {
+        stroke-linecap: square;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M64,27c-9-6-8-18,2-21"/>
+  <path class="cls-6" d="M6,27h146"/>
+  <line class="cls-5" x1="38" y1="47" x2="120" y2="47"/>
+  <line class="cls-2" x1="34" y1="65" x2="124" y2="65"/>
+  <line class="cls-3" x1="29" y1="83" x2="129" y2="83"/>
+  <rect class="cls-4" x="23" y="103" width="112" height="45"/>
+  <line class="cls-6" x1="23" y1="148" x2="23" y2="166"/>
+  <line class="cls-6" x1="135" y1="148" x2="135" y2="166"/>
+</svg>
