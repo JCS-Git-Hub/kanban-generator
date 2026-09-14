@@ -1,0 +1,15 @@
+:root {
+    --bg:#f5f7fb;
+    --surface:#fff;
+    --ink:#172033;
+    --muted:#687386;
+    --line:#e3e7ef;
+    --blue:#2563eb;
+    --blue-dark:#1d4ed8;
+    --blue-soft:#e9f0ff;
+    --high:#dc4b4b;
+    --medium:#c78b1d;
+    --low:#168a6b;
+    --shadow:0 10px 30px rgba(28,39,61,.07);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif
+}

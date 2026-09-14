@@ -1,0 +1,37 @@
+.modal-backdrop {
+    position:fixed;
+    inset:0;
+    background:#11182780;
+    display:grid;
+    place-items:center;
+    padding:20px;
+    z-index:10
+}
+
+.modal {
+    background:#fff;
+    border-radius:12px;
+    max-width:620px;
+    width:100%;
+    max-height:90vh;
+    overflow:auto;
+    padding:30px;
+    position:relative;
+    box-shadow:0 30px 80px #11182740
+}
+
+.modal-close {
+    position:absolute;
+    right:15px;
+    top:12px;
+    border:0;
+    background:none;
+    color:var(--muted);
+    font-size:27px;
+    cursor:pointer
+}
+
+.modal h2 {
+    margin:0 35px 22px 0;
+    font-size:23px
+}
