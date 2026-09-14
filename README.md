@@ -112,6 +112,16 @@ kanban-generator/
     ├── assets/
     │   └── logo.svg
     ├── css/
+    │   ├── atoms/
+    │   │   └── ...
+    │   ├── base/
+    │   │   └── ...
+    │   ├── molecules/
+    │   │   └── ...
+    │   ├── organisms/
+    │   │   └── ...
+    │   ├── templates/
+    │   │   └── ...
     │   └── style.css
     └── js/
         └── app.js
@@ -126,7 +136,7 @@ kanban-generator/
 - `README.md` — Documentación del proyecto.
 - `node_modules/` — Contiene las dependencias instaladas mediante npm. **Este directorio no se incluye en el repositorio**.
 - `src/assets/` — Contiene los recursos gráficos utilizados por la aplicación, como el logotipo SVG.
-- `src/css/style.css` — Contiene los estilos visuales y las reglas responsive de la aplicación.
+- `src/css/style.css` — Contiene los estilos visuales y las reglas responsive de la aplicación, importados de los demás archivos `.css`.
 - `src/js/app.js` — Contiene la lógica principal de la aplicación, incluyendo la gestión de tareas, comunicación con la API, búsqueda, comentarios y funcionalidad drag & drop.
 
 ## 7. Créditos
