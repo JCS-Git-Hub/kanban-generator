@@ -1,0 +1,65 @@
+.column {
+    min-height:460px;
+    background:#edf1f6;
+    border-radius:10px;
+    padding:16px
+}
+
+.column-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:2px 2px 14px
+}
+
+.column-title {
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-weight:750
+}
+
+.column-dot {
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--high);
+}
+
+.column[data-status="in-progress"] .column-dot {
+    background:var(--medium);
+}
+
+.column[data-status="done"] .column-dot {
+    background:var(--low);
+}
+
+.count {
+    color:var(--muted);
+    font-size:12px;
+    background:#fff;
+    padding:2px 8px;
+    border-radius:20px
+}
+
+.task-list {
+    min-height:390px;
+    display:flex;
+    flex-direction:column;
+    gap:10px
+}
+
+.empty {
+    color:var(--muted);
+    text-align:center;
+    padding:40px 10px;
+    font-size:13px
+}
+
+.sortable-ghost {
+    opacity:.35
+}
+
+.sortable-chosen {
+    box-shadow:0 15px 30px #17203325
+}

@@ -1,0 +1,29 @@
+.button {
+    border:0;
+    border-radius:8px;
+    padding:11px 16px;
+    font:inherit;
+    font-weight:700;
+    cursor:pointer
+}
+
+.button-primary {
+    background:var(--blue);
+    color:#fff;
+    box-shadow:0 5px 12px #2563eb30;
+    transition: background-color .2s ease;
+}
+
+.button-primary:hover {
+    background: var(--blue-dark);
+}
+
+.button-danger {
+    background:#fff1f1;
+    color:var(--high);
+    transition: background-color .2s ease;
+}
+
+.button-danger:hover {
+    background: #ffe0e0;
+}

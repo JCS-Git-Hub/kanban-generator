@@ -1,0 +1,53 @@
+.form-grid {
+    display:grid;
+    gap:15px
+}
+
+.field {
+    display:grid;
+    gap:6px
+}
+
+.field label {
+    font-size:12px;
+    font-weight:750;
+    color:var(--muted)
+}
+
+.field input,
+.field textarea,
+.field select {
+    font:inherit;
+    border:1px solid var(--line);
+    border-radius:7px;
+    padding:10px;
+    outline:none
+}
+
+#task-priority,
+#task-status {
+    cursor:pointer;
+}
+
+#task-date {
+    cursor:text;
+}
+
+.field textarea {
+    min-height:100px;
+    resize:vertical
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px #2563eb18
+}
+
+.form-actions {
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:20px
+}

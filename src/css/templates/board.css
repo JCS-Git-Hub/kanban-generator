@@ -1,0 +1,39 @@
+.shell {
+    max-width:1480px;
+    margin:0 auto;
+    padding:54px 5vw 72px
+}
+
+.intro {
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:30px;
+    margin-bottom:36px
+}
+
+.intro h1 {
+    font-size:36px;
+    line-height:1.1;
+    margin:0 0 3px;
+    letter-spacing:-.04em
+}
+
+.subtitle {
+    color:var(--muted);
+    margin:0
+}
+
+.board {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:22px;
+    align-items:start
+}
+
+.loading {
+    text-align:center;
+    grid-column:1/-1;
+    color:var(--muted);
+    padding:80px
+}

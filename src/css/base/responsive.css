@@ -1,0 +1,68 @@
+@media(max-width:850px) {
+    .site-header {
+        padding:0 20px
+    }
+
+    .stats {
+        display:none
+    }
+
+    .menu-button {
+        display:block
+    }
+
+    .header-actions .button {
+        padding:9px 12px
+    }
+
+    .mobile-menu {
+        position:absolute;
+        right:20px;
+        top:62px;
+        background:#fff;
+        border:1px solid var(--line);
+        border-radius:8px;
+        box-shadow:var(--shadow);
+        padding:8px;
+        min-width:180px
+    }
+
+    .shell {
+    padding:35px 20px
+    }
+
+    .intro {
+        display:block
+    }
+
+    .search {
+        margin-top:22px;
+        width:100%
+    }
+
+    .board {
+        grid-template-columns:1fr;
+        gap:15px
+    }
+
+    .column {
+        min-height:200px
+    }
+
+    .task-list {
+        min-height:80px
+    }
+
+    .intro h1 {
+        font-size:31px
+    }
+
+    .task-card .delete-card-button,
+    .task-card .edit-button,
+    .task-card .comments-button,
+    .comment-actions {
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+	}
+}

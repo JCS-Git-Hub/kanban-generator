@@ -1,0 +1,98 @@
+.card-actions {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.card-actions-right {
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.delete-card-button {
+    border:0;
+    background:none;
+    padding:0;
+    color:var(--high);
+    cursor:pointer;
+    font:inherit;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .2s ease, visibility .2s ease;
+}
+
+.task-card:hover .delete-card-button {
+    opacity:1;
+    visibility:visible;
+}
+
+.edit-button,
+.comments-button {
+    position:static;
+}
+
+.edit-button {
+    border:0;
+    padding:0;
+    background:none;
+    color:var(--muted);
+    cursor:pointer;
+    font:inherit;
+    font-size:17px;
+    line-height:1;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+}
+.comments-button {
+    border:0;
+    padding:0;
+    background:none;
+    color:var(--muted);
+    cursor:pointer;
+    font:inherit;
+    font-size:14px;
+    line-height:1;
+}
+
+.comments-button.no-comments {
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+}
+
+.edit-button:hover {
+	color:var(--blue);
+}
+
+.comments-button:hover {
+	color:var(--blue);
+}
+
+.delete-card-button:hover {
+	color:#b91c1c;
+}
+
+.task-card:hover .comments-button.no-comments {
+    opacity:1;
+    pointer-events:auto;
+}
+
+.task-card:hover .edit-button {
+    opacity:1;
+    pointer-events:auto;
+}
+
+.drag-handle {
+    position:static;
+    color:var(--muted);
+    cursor:grab;
+    font-size:18px;
+    line-height:1;
+    user-select:none;
+}
+
+.drag-handle:active {
+    cursor:grabbing;
+}
