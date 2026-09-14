@@ -26,11 +26,11 @@ Entre sus principales funcionalidades se encuentran:
 
 La aplicación utiliza una API REST proporcionada por `json-server` para gestionar las operaciones de creación, consulta, modificación y eliminación de las tareas y sus comentarios.
 
-## 2. Capturas de pantalla del sitio web
-**PENDIENTE POR SUBIR**
+## 2. Captura de pantalla del sitio web
+<img width="1920" height="1079" alt="Captura de pantalla del sitio web" src="https://github.com/user-attachments/assets/a05f569d-8115-4779-b0b2-0f9ecd571bd0" />
 
-## 3. Capturas de pantalla al prototipado
-**PENDIENTE POR SUBIR**
+## 3. Captura de pantalla al prototipado
+<img width="1920" height="1079" alt="Captura de pantalla al prototipado" src="https://github.com/user-attachments/assets/af06d218-0c4b-4667-bfd1-26f2d0ff27ac" />
 
 ## 4. Herramientas y stack tecnológico
 ### Tecnologías
